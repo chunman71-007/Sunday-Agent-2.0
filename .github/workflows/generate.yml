@@ -31,8 +31,11 @@ run: |
 pip install -r requirements.txt || echo "無 requirements.txt，跳過"
 
 - name: 執行貼紙生成器（安全傳參數）
+env:
+STYLE_INPUT: ${{ github.event.inputs.style }}
+TEXT_INPUT: ${{ github.event.inputs.text }}
 run: |
 echo "=== Debug: Inputs from workflow_dispatch ==="
-echo "Style: ${{ github.event.inputs.style }}"
-echo "Text : ${{ github.event.inputs.text }}"
-python src/generate_sticker.py "${{ github.event.inputs.style }}" "${{ github.event.inputs.text }}"
+echo "Style: $STYLE_INPUT"
+echo "Text : $TEXT_INPUT"
+python src/generate_sticker.py "$STYLE_INPUT" "$TEXT_INPUT"
