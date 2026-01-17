@@ -1,0 +1,41 @@
+name: Generate Sunday Sticker
+
+on:
+workflow_dispatch:
+inputs:
+style:
+description: '貼紙樣式 (e.g. birthday, christmas)'
+required: true
+default: 'new_year'
+type: string
+text:
+description: '貼紙文字 (e.g. Happy Purr-thday!)'
+required: false
+default: 'Happy Meow Year'
+type: string
+
+jobs:
+generate:
+runs-on: ubuntu-latest
+steps:
+- name: 拉取最新程式碼
+uses: actions/checkout@v4 # 更新到 v4，更快更穩
+
+- name: 設定 Python 環境
+uses: actions/setup-python@v5 # 更新到 v5
+with:
+python-version: '3.11' # 建議用 3.11 或 3.12
+
+- name: 安裝依賴（如果將來有 requirements.txt 就用）
+run: |
+pip install -r requirements.txt || echo "無 requirements.txt，跳過"
+
+- name: 執行貼紙生成器（安全傳參數）
+env:
+INPUT_STYLE: ${{ inputs.style }}
+INPUT_TEXT: ${{ inputs.text }}
+run: |
+echo "=== Workflow Inputs Debug ==="
+echo "Style from inputs: $INPUT_STYLE"
+echo "Text from inputs : $INPUT_TEXT"
+python src/generate_sticker.py "$INPUT_STYLE" "$INPUT_TEXT"
