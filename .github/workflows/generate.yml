@@ -35,7 +35,7 @@ env:
 INPUT_STYLE: ${{ inputs.style }}
 INPUT_TEXT: ${{ inputs.text }}
 run: |
-echo "=== Workflow Inputs Debug ==="
-echo "Style from inputs: $INPUT_STYLE"
-echo "Text from inputs : $INPUT_TEXT"
-python src/generate_sticker.py "$INPUT_STYLE" "$INPUT_TEXT"
+echo "=== Debug: Inputs from workflow_dispatch ==="
+echo "Style: ${{ inputs.style }}"
+echo "Text : ${{ inputs.text }}"
+python src/generate_sticker.py "${{ inputs.style }}" "${{ inputs.text }}"
