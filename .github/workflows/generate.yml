@@ -19,7 +19,7 @@ on:
         default: 'default'
         type: string
       background:
-        description: '背景模式 (transparent, white, black)'
+        description: '背景模式 (transparent, white, black, forest, starry, watercolor, smoke)'
         required: false
         default: 'transparent'
         type: string
