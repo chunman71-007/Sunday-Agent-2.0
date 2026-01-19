@@ -17,7 +17,7 @@ def split_text(text, max_chars_per_line=10):
         lines.append(current_line)
     return lines
 
-def create_sticker(style="new_year", text="Happy Meow Year", font_name="default", output_dir="assets/generated"):
+def create_sticker(style="new_year", text="Happy Meow Year", font_name="default", background="transparent", output_dir="assets/generated"):
     os.makedirs(output_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     safe_style = "".join(c if c.isalnum() or c in ['-', '_'] else '_' for c in style.lower())
@@ -25,7 +25,18 @@ def create_sticker(style="new_year", text="Happy Meow Year", font_name="default"
     filepath = os.path.join(output_dir, filename)
 
     width, height = 1024, 1024
-    img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+
+    # 背景設定
+    if background == "transparent":
+        img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    elif background == "white":
+        img = Image.new("RGBA", (width, height), (255, 255, 255, 255))
+    elif background == "black":
+        img = Image.new("RGBA", (width, height), (0, 0, 0, 255))
+    else:
+        print(f"⚠️ 未知背景選項 '{background}'，改用透明背景")
+        img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+
     draw = ImageDraw.Draw(img)
 
     # 嘗試載入字型
@@ -71,6 +82,7 @@ def create_sticker(style="new_year", text="Happy Meow Year", font_name="default"
     print(f"實際收到 style: '{style}'")
     print(f"實際收到 text : '{text}'")
     print(f"使用字型: {font_name}")
+    print(f"背景模式: {background}")
 
 if __name__ == "__main__":
     print("=== DEBUG: sys.argv 內容 ===")
@@ -78,4 +90,5 @@ if __name__ == "__main__":
     style = sys.argv[1].strip() if len(sys.argv) > 1 and sys.argv[1].strip() else "new_year"
     text = sys.argv[2].strip() if len(sys.argv) > 2 and sys.argv[2].strip() else "Happy Meow Year"
     font_name = sys.argv[3].strip() if len(sys.argv) > 3 and sys.argv[3].strip() else "default"
-    create_sticker(style=style, text=text, font_name=font_name)
+    background = sys.argv[4].strip() if len(sys.argv) > 4 and sys.argv[4].strip() else "transparent"
+    create_sticker(style=style, text=text, font_name=font_name, background=background)
